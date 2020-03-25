@@ -1,4 +1,4 @@
-export function Launch() {
+exports.Launch = function() {
     // Load the SDK
     var AWS = require('aws-sdk');
     // Load credentials and set region from JSON file
@@ -18,4 +18,4 @@ export function Launch() {
         else
             console.log(data); // successful response
     });
-}
+};
