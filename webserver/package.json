@@ -1,0 +1,8 @@
+{
+    "scripts": {
+        "start": "nodejs webserver"
+    },
+    "dependencies": {
+        "cors": "^2.8.5"
+    }
+}

@@ -10,36 +10,6 @@ app.get('/', (req, res) => {
   res.send('Hello from App Engine!');
 });
 
-//Admin
-app.get('/CreateUser', (req, res) => {
-
-    //TODO: Implement
-    res.send("Currently not implemented");
-
-});
-
-app.get('/UpdateUser', (req, res) => {
-
-    //TODO: Implement
-    res.send("Currently not implemented");
-
-});
-
-app.get('/DeleteUser', (req, res) => {
-
-    //TODO: Implement
-    res.send("Currently not implemented");
-
-});
-
-app.get('/GetUser', (req, res) => {
-
-    //TODO: Implement
-    res.send("Currently not implemented");
-
-});
-
-//AWS Related End Points
 app.get('/Create', (req, res) => {
 
     function ParseAWSResponse(resp) {
