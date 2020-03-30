@@ -2,6 +2,7 @@ const express = require('express'); //npm install express
 const cors = require('cors'); //npm install cors
 const app = express();
 const AWSMinecraftServerHosting = require('./MinecraftServer.js')
+const UserDB = require('./MongoDBTest.js')
 
 //TODO: Disable this before deploying to production
 app.use(cors()) //Enable All CORS (Cross-Origin) Requests - https://expressjs.com/en/resources/middleware/cors.html
@@ -10,6 +11,38 @@ app.get('/', (req, res) => {
   res.send('Hello from App Engine!');
 });
 
+//Admin
+app.get('/CreateUser/:username', (req, res) => {
+
+    UserDB.InsertUser(req.params.username)
+
+    //TODO: Add validation to ensure user was created
+    res.send("Successfully created user " + req.params.username);
+
+});
+
+app.get('/UpdateUser', (req, res) => {
+
+    //TODO: Implement
+    res.send("Currently not implemented");
+
+});
+
+app.get('/DeleteUser', (req, res) => {
+
+    //TODO: Implement
+    res.send("Currently not implemented");
+
+});
+
+app.get('/GetUser', (req, res) => {
+
+    //TODO: Implement
+    res.send("Currently not implemented");
+
+});
+
+//AWS Related End Points
 app.get('/Create', (req, res) => {
 
     function ParseAWSResponse(resp) {

@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+const rootURL = "http://localhost:8080";  //"http://192.168.1.7:8080";
+
 class GetInstance extends React.Component {
 
     GetInstance(InstanceID) {
-        var url = "http://192.168.1.7:8080/Get/InstanceID/" + InstanceID
+        var url = rootURL + "/Get/InstanceID/" + InstanceID
         fetch(url)
         .then(resp => resp.text())
         .then((data) => {alert(data)} )
@@ -19,7 +21,7 @@ class GetInstance extends React.Component {
 class CreateInstance extends React.Component {
 
     CreateInstance() {
-        var url = "http://192.168.1.7:8080/Create/"
+        var url = rootURL + "/Create/"
         fetch(url)
         .then(resp => resp.text())
         .then((data) => {alert(data)} )

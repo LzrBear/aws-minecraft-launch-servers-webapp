@@ -1,8 +1,11 @@
 {
     "scripts": {
-        "start": "nodejs webserver"
+        "start": "node webserver"
     },
     "dependencies": {
-        "cors": "^2.8.5"
+        "aws-sdk": "^2.648.0",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "mongodb": "^3.5.5"
     }
 }
