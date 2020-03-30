@@ -1,8 +1,10 @@
-exports.Launch = function() {
-    // Load the SDK
-    var AWS = require('aws-sdk');
-    // Load credentials and set region from JSON file
-    AWS.config.update({ region: 'us-east-2' });
+// Load the SDK
+const AWS = require('aws-sdk');
+// Load credentials and set region from JSON file
+AWS.config.update({ region: 'us-east-2' });
+
+exports.LaunchNewTemplate = function(callback) {
+
     var ec2 = new AWS.EC2();
     var params = {
         MaxCount: '1',
@@ -12,10 +14,50 @@ exports.Launch = function() {
             LaunchTemplateName: 'EC2-MineCraft-Configuration',
         },
     };
+
+    //Create the template instance
     ec2.runInstances(params, function (err, data) {
         if (err)
             console.log(err, err.stack); // an error occurred
         else
             console.log(data); // successful response
+            callback(data);
+    });
+
+    // var resp = `{ "Groups": [],
+    //     "Instances": 
+    //      [ { "AmiLaunchIndex": 0,
+    //          "ImageId": "ami-0c0415cdff14e2a4a",
+    //          "InstanceId": "i-07c0de80656b4dd8d",
+    //          "InstanceType": "t2.small",
+    //          "KeyName": "aws",
+    //          "LaunchTime": "2020-03-30T00:45:49.000Z",
+    //          "PrivateDnsName": "ip-10-0-1-148.us-east-2.compute.internal",
+    //          "PrivateIpAddress": "10.0.1.148",
+    //          "PublicDnsName": ""
+    //          } ],
+    //     "OwnerId": "766908429762",
+    //     "ReservationId": "r-006d76ea11c397e04" }`
+    // callback(resp);
+};
+
+
+exports.GetInstancePublicIPAddr = function(callback, InstanceId) {
+
+    var ec2 = new AWS.EC2();
+    var params = {
+        InstanceIds: [
+            InstanceId
+        ]
+    };
+
+    //Create the template instance
+    ec2.describeInstances(params, function (err, data) {
+        if (err) {
+          console.log(err);
+        }
+      
+        console.log(data);
+        callback(data);
     });
 };
