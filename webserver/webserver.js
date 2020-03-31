@@ -1,14 +1,36 @@
 const express = require('express'); //npm install express
 const cors = require('cors'); //npm install cors
+const bodyParser = require('body-parser');
 const app = express();
 const AWSMinecraftServerHosting = require('./MinecraftServer.js')
 const UserDB = require('./MongoDBTest.js')
 
 //TODO: Disable this before deploying to production
 app.use(cors()) //Enable All CORS (Cross-Origin) Requests - https://expressjs.com/en/resources/middleware/cors.html
+app.use(bodyParser());
 
 app.get('/', (req, res) => {
   res.send('Hello from App Engine!');
+});
+
+app.post('/auth', function(req, res) {
+	var username = req.body.username;
+	var password = req.body.password;
+	if (username && password) {
+		//connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+			if (true) { //TODO: Add logic for login
+				//req.session.loggedin = true;
+				//req.session.username = username;
+				res.send('Success');
+			} else {
+				res.send('Incorrect Username and/or Password!');
+			}			
+			res.end();
+		//});
+	} else {
+		res.send('Please enter Username and Password!');
+		res.end();
+	}
 });
 
 //Admin
