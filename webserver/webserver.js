@@ -105,8 +105,8 @@ app.get('/GetInstances', (req, res) => {
         var itemsProcessed = 0;
 
         resp.forEach(i => {
-            AWSMinecraftServerHosting.GetInstancePublicIPAddress(i).then(function(resp) {
-                instanceList.push({ID: i, IPAddr: resp});
+            AWSMinecraftServerHosting.GetInstanceDetails(i).then(function(resp) {
+                instanceList.push({ID: i, IPAddr: resp.IP, State: resp.State});
                 itemsProcessed++;
 
                 if (itemsProcessed == itemsToProcess) {

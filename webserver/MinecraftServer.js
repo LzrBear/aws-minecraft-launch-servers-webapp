@@ -84,3 +84,29 @@ exports.GetInstancePublicIPAddress = function(InstanceId) {
         });
     });
 };
+
+exports.GetInstanceDetails = function(InstanceId) {
+    return new Promise(function(resolve, reject) {
+        var ec2 = new AWS.EC2();
+        var params = {
+            InstanceIds: [
+                InstanceId
+            ]
+        };
+
+        //Create the template instance
+        ec2.describeInstances(params, function (err, data) {
+            if (err) {
+                reject(err);
+                throw err;
+            }
+
+            var response = { 
+                IP: data.Reservations[0].Instances[0].PublicIpAddres,
+                State: data.Reservations[0].Instances[0].State.Name
+            }
+
+            resolve(response);
+        });
+    });
+};

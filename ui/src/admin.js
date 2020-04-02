@@ -24,7 +24,10 @@ class CreateServer extends React.Component {
         var url = rootURL + "/CreateServer/"
         fetch(url)
         .then(resp => resp.text())
-        .then((data) => { alert(data); window.location.reload(); } )
+        .then((data) => { 
+            //alert(data); 
+            window.location.reload(); 
+        });
     }
 
     render() {
@@ -57,7 +60,7 @@ class WelcomeMsg extends React.Component {
 
         return (
             <div>
-                <h3>Welcome User { this.state.username }!</h3>
+                <h3>Welcome { this.state.username }</h3>
             </div>
         )
     };
@@ -78,7 +81,7 @@ class Logout extends React.Component {
         fetch(url)
         .then(resp => resp.text())
         .then((data) => {
-            alert(data);
+            //alert(data);
             if (data == 'Successfully logged out') {
                 //this.props.history.push("/"); //todo: determine why this doesn't work
                 window.location.href = '/'; //temporary hack because above line does not work
@@ -124,6 +127,7 @@ class ListInstances extends React.Component {
                     <tr>
                         <td>{instance.ID}</td>
                         <td>{instance.IPAddr}</td>
+                        <td>{instance.State}</td>
                         <td>
                             <button>Start</button>
                             <button>Stop</button>
@@ -140,7 +144,8 @@ class ListInstances extends React.Component {
                     <tr>
                         <th>Server ID</th>
                         <th>IP Address</th>
-                        <th></th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                     { instanceList }
                 </table>
@@ -156,23 +161,11 @@ class Admin extends React.Component {
             <div>
                 <WelcomeMsg/>               
                 <Logout/>
+                
+
+                <h2>Servers</h2>
                 <CreateServer/>
-
-                <h2>Existing Servers</h2>
-
-                {/* <GetInstance/> */}
                 <ListInstances/>
-                {/* <div>
-                        <label>Instance ID:</label>
-                        <label>xxx</label>
-                        <label>IP Address:</label>
-                        <label>xxx.xxx.xxx.xxx</label>
-                </div>
-                <div>
-                    <button>Start</button>
-                    <button>Stop</button>
-                    <button>Delete</button>
-                </div> */}
 
                 <br/>
                 
