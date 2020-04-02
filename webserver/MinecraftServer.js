@@ -41,50 +41,6 @@ exports.LaunchNewTemplate = function(callback) {
     // callback(resp);
 };
 
-
-exports.GetInstancePublicIPAddr = function(callback, InstanceId) {
-
-    var ec2 = new AWS.EC2();
-    var params = {
-        InstanceIds: [
-            InstanceId
-        ]
-    };
-
-    //Create the template instance
-    ec2.describeInstances(params, function (err, data) {
-        if (err) {
-          console.log(err);
-        }
-      
-        console.log(data);
-        callback(data);
-    });
-};
-
-exports.GetInstancePublicIPAddress = function(InstanceId) {
-    return new Promise(function(resolve, reject) {
-        var ec2 = new AWS.EC2();
-        var params = {
-            InstanceIds: [
-                InstanceId
-            ]
-        };
-
-        //Create the template instance
-        ec2.describeInstances(params, function (err, data) {
-            if (err) {
-            //console.log(err);
-            reject(err);
-            throw err;
-            }
-        
-            console.log(data);
-            resolve(data.Reservations[0].Instances[0].PublicIpAddress);
-        });
-    });
-};
-
 exports.GetInstanceDetails = function(InstanceId) {
     return new Promise(function(resolve, reject) {
         var ec2 = new AWS.EC2();

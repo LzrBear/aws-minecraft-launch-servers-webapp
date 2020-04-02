@@ -117,22 +117,6 @@ app.get('/GetInstances', (req, res) => {
     });
 });
 
-app.get('/Get/InstanceID/:instanceId', (req, res) => {
-
-    function ParseAWSResponse(resp) {
-
-        var IPAddr = resp.Reservations[0].Instances[0].PublicIpAddress;
-
-        res.send("Minecraft instance " + req.params.instanceId + " has an IP Address of " + IPAddr);
-
-        //TODO: Add some sort of error handling for when the template failed to get created - Currently the server will most likely crash
-    }
-
-    AWSMinecraftServerHosting.GetInstancePublicIPAddr(ParseAWSResponse, req.params.instanceId)
-    
-});
-
-
 app.get('/Start/InstanceID/:instanceId', (req, res) => {
 
     //TODO: Implement
