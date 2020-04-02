@@ -2,6 +2,7 @@ import React from "react";
 //import config from "./config"
 
 const rootURL = "http://192.168.1.7:8080";  //todo move the rooturl to the config file
+var username;
 
 class GetInstance extends React.Component {
 
@@ -20,7 +21,7 @@ class GetInstance extends React.Component {
 class CreateServer extends React.Component {
 
     CreateServer() {
-        var url = rootURL + "/Create/"
+        var url = rootURL + "/CreateServer/"
         fetch(url)
         .then(resp => resp.text())
         .then((data) => {alert(data)} )
@@ -93,6 +94,54 @@ class Logout extends React.Component {
         )
     };
 }
+
+
+class ListInstances extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { 
+            value: null
+        };
+    }
+
+    getInstances() {
+        var url = rootURL + "/GetInstances"
+        fetch(url)
+        .then(resp => resp.text())
+        .then((data) => {
+            alert(data);
+        })
+    }
+
+    //generateRow
+
+    render() {
+
+        this.getInstances();
+
+        return (
+            <div>
+                <table>
+                    <tr>
+                        <th>Server ID</th>
+                        <th>IP Address</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>xxx</td>
+                        <td>xxx.xxx.xxx.xxx</td>
+                        <td>
+                            <button>Start</button>
+                            <button>Stop</button>
+                            <button>Delete</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        )
+    };
+}
  
 class Admin extends React.Component {
 
@@ -105,7 +154,8 @@ class Admin extends React.Component {
                 <h2>Existing Servers</h2>
 
                 <GetInstance/>
-                <div>
+                <ListInstances/>
+                {/* <div>
                         <label>Instance ID:</label>
                         <label>xxx</label>
                         <label>IP Address:</label>
@@ -115,7 +165,7 @@ class Admin extends React.Component {
                     <button>Start</button>
                     <button>Stop</button>
                     <button>Delete</button>
-                </div>
+                </div> */}
 
                 <br/>
                 <Logout/>

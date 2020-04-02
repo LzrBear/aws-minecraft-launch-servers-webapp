@@ -81,12 +81,13 @@ app.get('/GetUser', (req, res) => {
 });
 
 //AWS Related End Points
-app.get('/Create', (req, res) => {
+app.get('/CreateServer', (req, res) => {
 
     function ParseAWSResponse(resp) {
 
         var InstanceId = resp.Instances[0].InstanceId;
 
+        dbTools.AddServerToUser(sess.username, InstanceId);
         res.send("Creating new Minecraft instance " + InstanceId);
 
         //TODO: Add some sort of error handling for when the template failed to get created - Currently the server will most likely crash
@@ -94,6 +95,12 @@ app.get('/Create', (req, res) => {
 
     AWSMinecraftServerHosting.LaunchNewTemplate(ParseAWSResponse)
     
+});
+
+app.get('/GetInstances', (req, res) => {
+    dbTools.GetServersForUser(sess.username).then(function(resp) {
+        res.send(resp);
+    });
 });
 
 app.get('/Get/InstanceID/:instanceId', (req, res) => {

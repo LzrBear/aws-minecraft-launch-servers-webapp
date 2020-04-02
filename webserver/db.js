@@ -3,7 +3,7 @@ const url = "mongodb://localhost:27017/";
 
 exports.CreateDataBase = function() {
 
-    mongodb.MongoClient(url).connect(function(err, db) {
+    mongodb.MongoClient(url, { useUnifiedTopology: true }).connect(function(err, db) {
         if (err) throw err;
         console.log("Database created!"); 
         
@@ -22,7 +22,7 @@ exports.CreateNewUser = function (username, password) {
 
     var data = { username: username, password: password, instances : [] } //TODO: Hash and salt the password
 
-    mongodb.MongoClient(url).connect(function(err, db) {
+    mongodb.MongoClient(url, { useUnifiedTopology: true }).connect(function(err, db) {
         if (err) throw err;
 
         var dbo = db.db("AWS-MinecraftServerService");
@@ -38,16 +38,16 @@ exports.CreateNewUser = function (username, password) {
 
 exports.VerifyUserPassword = function (username, password) {
     return new Promise(function(resolve, reject) {
-        mongodb.MongoClient(url).connect(function(err, db) {
+        mongodb.MongoClient(url, { useUnifiedTopology: true }).connect(function(err, db) {
             if (err) {
                 reject(err);
-                throw new err;
+                throw err;
             } 
             var dbo = db.db("AWS-MinecraftServerService");
             dbo.collection("users").findOne({username: username}, function(err, result) {
                 if (err) {
                     reject(err);
-                    throw new err;
+                    throw err;
                 }
                 console.log(result);
                 db.close();
@@ -63,9 +63,9 @@ exports.VerifyUserPassword = function (username, password) {
 }
 
 exports.UpdateUser = function (name, data) {
-    mongodb.MongoClient(url).connect(function(err, db) {
+    mongodb.MongoClient(url, { useUnifiedTopology: true }).connect(function(err, db) {
         if (err) throw err;
-        var dbo = db.db("AWS_Server_Service");
+        var dbo = db.db("AWS-MinecraftServerService");
         var myquery = { username: name };
         var newvalues = { $set: data };
         dbo.collection("users").updateMany(myquery, newvalues, function(err, res) {
@@ -76,8 +76,45 @@ exports.UpdateUser = function (name, data) {
     }); 
 }
 
+exports.AddServerToUser = function (username, serverID) {
+    mongodb.MongoClient(url, { useUnifiedTopology: true }).connect(function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("AWS-MinecraftServerService");
+        var myquery = { username: username };
+        var newvalues = { $push: { instances: serverID } };
+        dbo.collection("users").updateMany(myquery, newvalues, function(err, res) {
+            if (err) throw err;
+            console.log(res.result.nModified + " document(s) updated");
+            db.close();
+        });
+    }); 
+}
+
+exports.GetServersForUser = function (username) {
+    return new Promise(function(resolve, reject) {
+        mongodb.MongoClient(url, { useUnifiedTopology: true }).connect(function(err, db) {
+            if (err) {
+                reject(err);
+                throw err;
+            }
+            var dbo = db.db("AWS-MinecraftServerService");
+            dbo.collection("users").findOne({username: username}, function(err, result) {
+                if (err) {
+                    reject(err);
+                    throw err;
+                }
+
+                resolve(result.instances);
+                console.log(result.instances);
+                db.close();
+            });
+        });
+    }); 
+}
+
+
 // var myobj = { username: "Company Inc", instances: "Highway 41" };
 // //this.InsertUser(myobj);
 
-// var myobj = { instances: "Highway 411" };
-// this.UpdateUser("Company Inc", myobj);
+//var myobj = { instances: ["Gpat 4121"] };
+//this.AddServerToUser("test", "Koala");

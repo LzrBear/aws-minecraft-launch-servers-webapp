@@ -13,7 +13,7 @@ class MineCraftAdminConsole extends React.Component {
         return (
             <div>
                 <HashRouter>
-                    <h1>Manage MineCraft Servers</h1>
+                    <h1>Manage Minecraft Servers</h1>
                     <div className="content">
                         <Route exact path="/" component={Login}/>
                         <Route path="/admin" component={Admin}/>
