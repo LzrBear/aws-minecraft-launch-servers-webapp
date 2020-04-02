@@ -102,7 +102,7 @@ exports.GetInstanceDetails = function(InstanceId) {
             }
 
             var response = { 
-                IP: data.Reservations[0].Instances[0].PublicIpAddres,
+                IP: data.Reservations[0].Instances[0].PublicIpAddress,
                 State: data.Reservations[0].Instances[0].State.Name
             }
 
