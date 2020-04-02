@@ -140,7 +140,7 @@ app.get('/Start/InstanceID/:instanceId', (req, res) => {
 
 });
 
-app.get('/Shutdown/InstanceID/:instanceId', (req, res) => {
+app.get('/Stop/InstanceID/:instanceId', (req, res) => {
 
     //TODO: Implement
     res.send("Currently not implemented");

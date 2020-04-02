@@ -2,7 +2,6 @@ import React from "react";
 //import config from "./config"
 
 const rootURL = "http://192.168.1.7:8080";  //todo move the rooturl to the config file
-var username;
 
 class GetInstance extends React.Component {
 
@@ -98,7 +97,6 @@ class Logout extends React.Component {
     };
 }
 
-
 class ListInstances extends React.Component {
 
     constructor(props) {
@@ -117,16 +115,34 @@ class ListInstances extends React.Component {
         })
     }
 
-    stopServer(instanceID) {
-        alert("STOP SERVER " + instanceID);
+    startServer(instanceID) {
+        var url = rootURL + "/Start/InstanceID/" + instanceID
+        fetch(url)
+        .then(resp => resp.text())
+        .then((data) => { 
+            alert(data); 
+            window.location.reload(); 
+        });
     }
 
-    startServer(instanceID) {
-        alert("START SERVER " + instanceID);
+    stopServer(instanceID) {
+        var url = rootURL + "/Stop/InstanceID/" + instanceID
+        fetch(url)
+        .then(resp => resp.text())
+        .then((data) => { 
+            alert(data); 
+            window.location.reload(); 
+        });
     }
 
     deleteServer(instanceID) {
-        alert("DELETE SERVER " + instanceID);
+        var url = rootURL + "/Delete/InstanceID/" + instanceID
+        fetch(url)
+        .then(resp => resp.text())
+        .then((data) => { 
+            alert(data); 
+            window.location.reload(); 
+        });
     }
 
     render() {
@@ -172,14 +188,9 @@ class Admin extends React.Component {
             <div>
                 <WelcomeMsg/>               
                 <Logout/>
-                
-
                 <h2>Servers</h2>
                 <CreateServer/>
-                <ListInstances/>
-
-                <br/>
-                
+                <ListInstances/>               
             </div>
         )
     }
