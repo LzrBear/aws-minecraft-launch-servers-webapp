@@ -93,13 +93,20 @@ app.get('/CreateServer', (req, res) => {
         //TODO: Add some sort of error handling for when the template failed to get created - Currently the server will most likely crash
     }
 
-    AWSMinecraftServerHosting.LaunchNewTemplate(ParseAWSResponse)
+    AWSMinecraftServerHosting.LaunchNewTemplate(ParseAWSResponse);
     
 });
 
 app.get('/GetInstances', (req, res) => {
     dbTools.GetServersForUser(sess.username).then(function(resp) {
-        res.send(resp);
+
+        var instanceList = [];
+
+        resp.forEach(i => {
+            instanceList.push({ID: i, IPAddr: "aaa.aaa.aaa.aaa"});
+        });
+
+        res.send(instanceList);
     });
 });
 

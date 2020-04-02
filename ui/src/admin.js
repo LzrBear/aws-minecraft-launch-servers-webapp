@@ -101,7 +101,7 @@ class ListInstances extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            value: null
+            value: []
         };
     }
 
@@ -110,7 +110,7 @@ class ListInstances extends React.Component {
         fetch(url)
         .then(resp => resp.json())
         .then((data) => {
-            alert(data); this.setState({instances: data});
+            this.setState({instances: data});
         })
     }
 
@@ -119,12 +119,12 @@ class ListInstances extends React.Component {
         if (typeof this.state.instances == 'undefined') {
             this.getInstances();
         } else {
-            debugger;
-            var instanceList = this.state.instances.map(function(instanceID){
+            var instanceList = this.state.instances.map(function(instance){
+                debugger;
                 return (
                     <tr>
-                        <td>{instanceID}</td>
-                        <td>xxx.xxx.xxx.xxx</td>
+                        <td>{instance.ID}</td>
+                        <td>{instance.IPAddr}</td>
                         <td>
                             <button>Start</button>
                             <button>Stop</button>
