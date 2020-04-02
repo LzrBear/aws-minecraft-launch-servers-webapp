@@ -42,7 +42,7 @@ class WelcomeMsg extends React.Component {
         };
       }
 
-    GetUserName() {
+    getUserName() {
         var url = rootURL + "/GetUser/"
         fetch(url)
         .then(resp => resp.text())
@@ -52,7 +52,7 @@ class WelcomeMsg extends React.Component {
     render() {
         
         if (typeof this.state.username == 'undefined') {
-            this.GetUserName();
+            this.getUserName();
         }
 
         return (
@@ -108,17 +108,32 @@ class ListInstances extends React.Component {
     getInstances() {
         var url = rootURL + "/GetInstances"
         fetch(url)
-        .then(resp => resp.text())
+        .then(resp => resp.json())
         .then((data) => {
-            alert(data);
+            alert(data); this.setState({instances: data});
         })
     }
 
-    //generateRow
-
     render() {
 
-        this.getInstances();
+        if (typeof this.state.instances == 'undefined') {
+            this.getInstances();
+        } else {
+            debugger;
+            var instanceList = this.state.instances.map(function(instanceID){
+                return (
+                    <tr>
+                        <td>{instanceID}</td>
+                        <td>xxx.xxx.xxx.xxx</td>
+                        <td>
+                            <button>Start</button>
+                            <button>Stop</button>
+                            <button>Delete</button>
+                        </td>
+                    </tr>
+                )
+            })
+        }
 
         return (
             <div>
@@ -128,15 +143,7 @@ class ListInstances extends React.Component {
                         <th>IP Address</th>
                         <th></th>
                     </tr>
-                    <tr>
-                        <td>xxx</td>
-                        <td>xxx.xxx.xxx.xxx</td>
-                        <td>
-                            <button>Start</button>
-                            <button>Stop</button>
-                            <button>Delete</button>
-                        </td>
-                    </tr>
+                    { instanceList }
                 </table>
             </div>
         )
@@ -149,11 +156,12 @@ class Admin extends React.Component {
         return (
             <div>
                 <WelcomeMsg/>               
+                <Logout/>
                 <CreateServer/>
 
                 <h2>Existing Servers</h2>
 
-                <GetInstance/>
+                {/* <GetInstance/> */}
                 <ListInstances/>
                 {/* <div>
                         <label>Instance ID:</label>
@@ -168,7 +176,7 @@ class Admin extends React.Component {
                 </div> */}
 
                 <br/>
-                <Logout/>
+                
             </div>
         )
     }
