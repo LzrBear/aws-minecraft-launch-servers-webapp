@@ -3,6 +3,34 @@ import React from "react";
 
 const rootURL = "http://192.168.1.7:8080";  //todo move the rooturl to the config file
 
+class GetInstance extends React.Component {
+
+    GetInstance(InstanceID) {
+        var url = rootURL + "/Get/InstanceID/" + InstanceID
+        fetch(url)
+        .then(resp => resp.text())
+        .then((data) => {alert(data)} )
+    }
+
+    render() {
+        return <button onClick={() => {this.GetInstance("i-0c52c07979a3a8904")}}>Get Instance Details</button>
+    }
+}
+
+class CreateServer extends React.Component {
+
+    CreateServer() {
+        var url = rootURL + "/Create/"
+        fetch(url)
+        .then(resp => resp.text())
+        .then((data) => {alert(data)} )
+    }
+
+    render() {
+        return <button onClick={() => {this.CreateServer()}}>Create New Server</button>
+    }
+}
+
 class WelcomeMsg extends React.Component {
 
     constructor(props) {
@@ -71,13 +99,12 @@ class Admin extends React.Component {
     render() {
         return (
             <div>
-                <WelcomeMsg/>
-
-                
-                <button>Create New Server</button>
-
+                <WelcomeMsg/>               
+                <CreateServer/>
 
                 <h2>Existing Servers</h2>
+
+                <GetInstance/>
                 <div>
                         <label>Instance ID:</label>
                         <label>xxx</label>
