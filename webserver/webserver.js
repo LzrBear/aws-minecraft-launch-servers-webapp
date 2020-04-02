@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const AWSMinecraftServerHosting = require('./MinecraftServer.js')
 const UserDB = require('./MongoDBTest.js')
+const dbTools = require('./db.js')
 
 //TODO: Disable this before deploying to production
 app.use(cors()) //Enable All CORS (Cross-Origin) Requests - https://expressjs.com/en/resources/middleware/cors.html
@@ -18,14 +19,34 @@ app.post('/auth', function(req, res) {
 	var password = req.body.password;
 	if (username && password) {
 		//connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-			if (true) { //TODO: Add logic for login
-				//req.session.loggedin = true;
-				//req.session.username = username;
-				res.send('Success');
-			} else {
-				res.send('Incorrect Username and/or Password!');
-			}			
-			res.end();
+            
+            dbTools.VerifyUserPassword(username, password).then(function(resp) {
+                if (resp == true) {
+                    res.send('Success');
+                } else {
+                    res.send('Incorrect Username and/or Password!');
+                }
+                res.end();
+            })
+
+
+            // .then(() => {console.log("F")})
+            //  .then( (value) => {
+            //     console.log(value)
+            // }
+
+            
+        
+        
+        
+        // if (dbTools.VerifyUserPassword(username, password)) { //TODO: Add logic for login
+		// 		//req.session.loggedin = true;
+		// 		//req.session.username = username;
+		// 		res.send('Success');
+		// 	} else {
+		// 		res.send('Incorrect Username and/or Password!');
+		// 	}			
+		// 	res.end();
 		//});
 	} else {
 		res.send('Please enter Username and Password!');
@@ -34,9 +55,13 @@ app.post('/auth', function(req, res) {
 });
 
 //Admin
-app.get('/CreateUser/:username', (req, res) => {
+app.get('/CreateNewUser/:username', (req, res) => {
 
-    UserDB.InsertUser(req.params.username)
+    //UserDB.InsertUser(req.params.username)
+
+
+    var password = 'p'; //TODO: Read this value in from the client
+    dbTools.CreateNewUser(req.params.username, password);
 
     //TODO: Add validation to ensure user was created
     res.send("Successfully created user " + req.params.username);
