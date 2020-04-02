@@ -117,21 +117,32 @@ class ListInstances extends React.Component {
         })
     }
 
+    stopServer(instanceID) {
+        alert("STOP SERVER " + instanceID);
+    }
+
+    startServer(instanceID) {
+        alert("START SERVER " + instanceID);
+    }
+
+    deleteServer(instanceID) {
+        alert("DELETE SERVER " + instanceID);
+    }
+
     render() {
         if (typeof this.state.instances == 'undefined') {
             this.getInstances();
         } else {
-            var instanceList = this.state.instances.map(function(instance){
-                debugger;
+            var instanceList = this.state.instances.map((instance) => {
                 return (
                     <tr>
                         <td>{instance.ID}</td>
                         <td>{instance.IPAddr}</td>
                         <td>{instance.State}</td>
                         <td>
-                            <button>Start</button>
-                            <button>Stop</button>
-                            <button>Delete</button>
+                            <button onClick={() => {this.startServer(instance.ID)}}>Start</button>
+                            <button onClick={() => {this.stopServer(instance.ID)}}>Stop</button>
+                            <button onClick={() => {this.deleteServer(instance.ID)}}>Delete</button>
                         </td>
                     </tr>
                 )
