@@ -1,61 +1,54 @@
-const express = require('express'); //npm install express
-const cors = require('cors'); //npm install cors
+const express = require('express');
+const session = require('express-session');
+const cors = require('cors');
 const bodyParser = require('body-parser');
-const app = express();
 const AWSMinecraftServerHosting = require('./MinecraftServer.js')
-const UserDB = require('./MongoDBTest.js')
 const dbTools = require('./db.js')
 
-//TODO: Disable this before deploying to production
-app.use(cors()) //Enable All CORS (Cross-Origin) Requests - https://expressjs.com/en/resources/middleware/cors.html
+
+var sess; // global session, NOT recommended
+
+const app = express();
+app.use(cors()) //Enable All CORS (Cross-Origin) Requests - https://expressjs.com/en/resources/middleware/cors.html //TODO: Disable this before deploying to production
 app.use(bodyParser());
+app.use(session({secret: 'ssshhhhh'}));
 
 app.get('/', (req, res) => {
   res.send('Hello from App Engine!');
 });
 
-app.post('/auth', function(req, res) {
+app.post('/login', function(req, res) {
 	var username = req.body.username;
 	var password = req.body.password;
-	if (username && password) {
-		//connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-            
-            dbTools.VerifyUserPassword(username, password).then(function(resp) {
-                if (resp == true) {
-                    res.send('Success');
-                } else {
-                    res.send('Incorrect Username and/or Password!');
-                }
-                res.end();
-            })
-
-
-            // .then(() => {console.log("F")})
-            //  .then( (value) => {
-            //     console.log(value)
-            // }
-
-            
-        
-        
-        
-        // if (dbTools.VerifyUserPassword(username, password)) { //TODO: Add logic for login
-		// 		//req.session.loggedin = true;
-		// 		//req.session.username = username;
-		// 		res.send('Success');
-		// 	} else {
-		// 		res.send('Incorrect Username and/or Password!');
-		// 	}			
-		// 	res.end();
-		//});
+	if (username && password) {           
+        dbTools.VerifyUserPassword(username, password).then(function(resp) {
+            if (resp == true) {
+                sess = req.session;
+                sess.username = username;
+                res.send('Success');
+            } else {
+                res.send('Incorrect Username and/or Password!');
+            }
+            res.end();
+        });
 	} else {
 		res.send('Please enter Username and Password!');
 		res.end();
 	}
 });
 
+app.get('/logout', function(req, res) {
+	req.session.destroy((err) => {
+        if(err) {
+            return console.log(err); //throw new error?
+        }
+        res.send('Successfully logged out');
+        res.end();
+    });
+});
+
 //Admin
-app.get('/CreateNewUser/:username', (req, res) => {
+app.get('/CreateUser/:username', (req, res) => {
 
     //UserDB.InsertUser(req.params.username)
 
@@ -83,10 +76,8 @@ app.get('/DeleteUser', (req, res) => {
 });
 
 app.get('/GetUser', (req, res) => {
-
-    //TODO: Implement
-    res.send("Currently not implemented");
-
+    res.send(sess.username);
+    res.end();
 });
 
 //AWS Related End Points

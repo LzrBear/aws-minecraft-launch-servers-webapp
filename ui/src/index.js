@@ -6,9 +6,11 @@ import {
     NavLink,
     HashRouter
   } from "react-router-dom";
-  import Home from "./home";
+import Home from "./home";
 import Stuff from "./stuff";
 import Contact from "./contact";
+import Login from "./login";
+import Admin from "./admin";
 
 const rootURL = "http://192.168.1.7:8080"; //"http://localhost:8080";  //
 
@@ -40,64 +42,127 @@ class CreateInstance extends React.Component {
     }
 }
 
-class MineCraftAdminConsole extends React.Component {
-    render() {
-        return (
-            <div>
-                <p>MineCraft Server</p>
-                <CreateInstance />
-                <br/>
-                <GetInstance />
-            </div>
-        )
-    }
-}
-
-class Login extends React.Component {
+class WelcomeMsg extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { 
-            value: null
+  
+        this.state = {
+          data : null
         };
-    }
-    
-    login() {
-        console.log("Email: " + this.state.email);
-        console.log("Password: " + this.state.password);
+      }
 
-        var url = rootURL + "/auth/"
-        fetch(url, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({username: this.state.email, password: this.state.password})
-        })
+    // async GetUserName() {
+    //     var url = rootURL + "/GetUser/"
+    //     var resp = await fetch(url);
+    //     var data = await resp.text();
+    //     return data;
+    // }
+
+    GetUserName() {
+        var url = rootURL + "/GetUser/"
+        fetch(url)
+        .then(resp => resp.text())
+        .then((data) => { this.setState({username: data}) } )
+    }
+
+    render() {
+        
+        if (typeof this.state.username == 'undefined') {
+            this.GetUserName();
+        }
+
+        return (
+            <div>
+                <h3>Welcome User { this.state.username }!</h3>
+            </div>
+        )
+    };
+
+}
+
+class Logout extends React.Component {
+
+    logout() {
+        var url = rootURL + "/logout/"
+        fetch(url)
         .then(resp => resp.text())
         .then((data) => {alert(data)} )
     }
 
-    handleEmailChange(e) {
-        this.setState({email: e.target.value});
-    }
-
-    handlePasswordChange(e) {
-        this.setState({password: e.target.value});
-    }
-
     render() {
         return (
-            <div class="login-form">
-                <h2>Login Form</h2>
-                <input type="text" name="username" value={this.state.email} onChange={(e) => {this.handleEmailChange(e)}} placeholder="Username" required />
-                <input type="password" name="password" value={this.state.password} onChange={(e) => {this.handlePasswordChange(e)}} placeholder="Password" required />
-                <button onClick={() => {this.login()}}>Submit</button>
+            <div>
+                <button onClick={() => {this.logout()}}>Log Out</button>
+            </div>
+        )
+    };
+}
+
+// class Login extends React.Component {
+
+//     constructor(props) {
+//         super(props);
+//         this.state = { 
+//             value: null
+//         };
+//     }
+    
+//     login() {
+//         console.log("Email: " + this.state.email);
+//         console.log("Password: " + this.state.password);
+
+//         var url = rootURL + "/login/"
+//         fetch(url, {
+//             headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json'
+//             },
+//             method: 'POST',
+//             body: JSON.stringify({username: this.state.email, password: this.state.password})
+//         })
+//         .then(resp => resp.text())
+//         .then((data) => {alert(data)} )
+//     }
+
+//     handleEmailChange(e) {
+//         this.setState({email: e.target.value});
+//     }
+
+//     handlePasswordChange(e) {
+//         this.setState({password: e.target.value});
+//     }
+
+//     render() {
+//         return (
+//             <div class="login-form">
+//                 <h2>Login Form</h2>
+//                 <input type="text" name="username" value={this.state.email} onChange={(e) => {this.handleEmailChange(e)}} placeholder="Username" required />
+//                 <input type="password" name="password" value={this.state.password} onChange={(e) => {this.handlePasswordChange(e)}} placeholder="Password" required />
+//                 <button onClick={() => {this.login()}}>Submit</button>
+//             </div>
+//         )
+//     }
+// }
+
+class MineCraftAdminConsole extends React.Component {
+    render() {
+        return (
+            <div>
+                <HashRouter>
+                    <h1>Manage MineCraft Servers</h1>
+
+                    <div className="content">
+                        <Route exact path="/" component={Login}/>
+                        <Route path="/admin" component={Admin}/>
+                        <Route path="/contact" component={Contact}/>
+                    </div>
+                </HashRouter>
             </div>
         )
     }
 }
+
 
 
 class SPA extends React.Component{
@@ -132,10 +197,10 @@ class Main extends React.Component {
             <div>
                 <h1>Manage MineCraft Servers</h1>
 
-                <Login />
+                {/* <Login /> */}
 
                 <div>
-                    <h3>Welcome User ????</h3>
+                    <WelcomeMsg/>
 
                     
                     <button>Create New Server</button>
@@ -155,6 +220,9 @@ class Main extends React.Component {
                     </div>
                 </div>
 
+                <br/>
+                <Logout/>
+
 
                 <br/>
                 <br/>
@@ -171,7 +239,7 @@ class Main extends React.Component {
   // =======================================
   
   ReactDOM.render(
-    <Main />,
+    <MineCraftAdminConsole />,
     document.getElementById('root')
   );
 
