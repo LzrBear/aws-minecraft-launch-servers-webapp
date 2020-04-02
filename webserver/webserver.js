@@ -101,12 +101,19 @@ app.get('/GetInstances', (req, res) => {
     dbTools.GetServersForUser(sess.username).then(function(resp) {
 
         var instanceList = [];
+        var itemsToProcess = resp.length;
+        var itemsProcessed = 0;
 
         resp.forEach(i => {
-            instanceList.push({ID: i, IPAddr: "aaa.aaa.aaa.aaa"});
-        });
+            AWSMinecraftServerHosting.GetInstancePublicIPAddress(i).then(function(resp) {
+                instanceList.push({ID: i, IPAddr: resp});
+                itemsProcessed++;
 
-        res.send(instanceList);
+                if (itemsProcessed == itemsToProcess) {
+                    res.send(instanceList);
+                }
+            });
+        })
     });
 });
 

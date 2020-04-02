@@ -24,7 +24,7 @@ class CreateServer extends React.Component {
         var url = rootURL + "/CreateServer/"
         fetch(url)
         .then(resp => resp.text())
-        .then((data) => {alert(data)} )
+        .then((data) => { alert(data); window.location.reload(); } )
     }
 
     render() {
@@ -115,7 +115,6 @@ class ListInstances extends React.Component {
     }
 
     render() {
-
         if (typeof this.state.instances == 'undefined') {
             this.getInstances();
         } else {
