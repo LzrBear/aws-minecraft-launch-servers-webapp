@@ -2,16 +2,25 @@ const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const redis = require('redis');
+const redisStore = require('connect-redis')(session);
+const client  = redis.createClient();
 const AWSMinecraftServerHosting = require('./MinecraftServer.js')
 const dbTools = require('./db.js')
 
 
-var sess; // global session, NOT recommended
+//var sess; // global session, NOT recommended
 
 const app = express();
 app.use(cors()) //Enable All CORS (Cross-Origin) Requests - https://expressjs.com/en/resources/middleware/cors.html //TODO: Disable this before deploying to production
 app.use(bodyParser());
-app.use(session({secret: 'ssshhhhh'}));
+app.use(session({
+    secret: 'ssshhhhh',
+    // create new redis store.
+    store: new redisStore({ host: 'localhost', port: 6379, client: client,ttl : 260}),
+    saveUninitialized: false,
+    resave: false
+}));
 
 app.get('/', (req, res) => {
   res.send('Hello from App Engine!');

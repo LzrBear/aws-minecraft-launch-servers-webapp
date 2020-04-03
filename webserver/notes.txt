@@ -1,0 +1,11 @@
+#Command to run when setting up server
+
+#install redis
+sudo apt-get install redis-server
+
+#start redis
+redis-server &
+
+urls:
+https://codeforgeek.com/manage-session-using-node-js-express-4/
+https://codeforgeek.com/using-redis-to-handle-session-in-node-js/
