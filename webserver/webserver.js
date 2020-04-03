@@ -131,7 +131,7 @@ app.get('/Stop/Instance/:instanceId', (req, res) => {
 
 app.get('/Delete/Instance/:instanceId', (req, res) => {
     AWSMinecraftServerHosting.DeleteInstance(req.params.instanceId).then(function(resp) {
-        //TODO: Delete the instance from the user object in mongodb
+        dbTools.DeleteServerFromUser(sess.username, req.params.instanceId);
         res.send(resp);
     });
 });

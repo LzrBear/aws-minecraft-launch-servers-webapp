@@ -53,8 +53,8 @@ exports.GetInstanceDetails = function(InstanceId) {
         //Create the template instance
         ec2.describeInstances(params, function (err, data) {
             if (err) {
+                console.log(err);
                 reject(err);
-                throw err;
             }
 
             IP = "Unknown";
@@ -88,8 +88,8 @@ exports.StartInstance = function(InstanceId) {
         //Create the template instance
         ec2.startInstances(params, function (err, data) {
             if (err) {
+                console.log(err);
                 reject(err);
-                throw err;
             }
 
             resolve("success");
@@ -109,8 +109,8 @@ exports.StopInstance = function(InstanceId) {
         //Create the template instance
         ec2.stopInstances(params, function (err, data) {
             if (err) {
+                console.log(err);
                 reject(err);
-                throw err;
             }
 
             resolve("success");
@@ -130,8 +130,8 @@ exports.DeleteInstance = function(InstanceId) {
         //Create the template instance
         ec2.terminateInstances(params, function (err, data) {
             if (err) {
+                console.log(err);
                 reject(err);
-                throw err;
             }
 
             resolve("success");

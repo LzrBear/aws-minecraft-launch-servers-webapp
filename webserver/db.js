@@ -90,6 +90,21 @@ exports.AddServerToUser = function (username, serverID) {
     }); 
 }
 
+exports.DeleteServerFromUser = function (username, serverID) {
+    mongodb.MongoClient(url, { useUnifiedTopology: true }).connect(function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("AWS-MinecraftServerService");
+        var myquery = { username: username };
+        var newvalues = { $pull: { instances: serverID } };
+        dbo.collection("users").updateMany(myquery, newvalues, function(err, res) {
+            if (err) throw err;
+            console.log(res.result.nModified + " document(s) updated");
+            db.close();
+        });
+    }); 
+}
+
+
 exports.GetServersForUser = function (username) {
     return new Promise(function(resolve, reject) {
         mongodb.MongoClient(url, { useUnifiedTopology: true }).connect(function(err, db) {
