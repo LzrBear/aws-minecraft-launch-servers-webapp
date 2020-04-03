@@ -116,31 +116,31 @@ class ListInstances extends React.Component {
     }
 
     startServer(instanceID) {
-        var url = rootURL + "/Start/InstanceID/" + instanceID
+        var url = rootURL + "/Start/Instance/" + instanceID
         fetch(url)
         .then(resp => resp.text())
         .then((data) => { 
-            alert(data); 
+            //alert(data); 
             window.location.reload(); 
         });
     }
 
     stopServer(instanceID) {
-        var url = rootURL + "/Stop/InstanceID/" + instanceID
+        var url = rootURL + "/Stop/Instance/" + instanceID
         fetch(url)
         .then(resp => resp.text())
         .then((data) => { 
-            alert(data); 
+            //alert(data); 
             window.location.reload(); 
         });
     }
 
     deleteServer(instanceID) {
-        var url = rootURL + "/Delete/InstanceID/" + instanceID
+        var url = rootURL + "/Delete/Instance/" + instanceID
         fetch(url)
         .then(resp => resp.text())
         .then((data) => { 
-            alert(data); 
+            //alert(data); 
             window.location.reload(); 
         });
     }

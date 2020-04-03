@@ -57,12 +57,84 @@ exports.GetInstanceDetails = function(InstanceId) {
                 throw err;
             }
 
+            IP = "Unknown";
+            State = "Unknown";
+
+            if (data.Reservations.length != 0) { //if we did not get any information from AWS do not update values from unknown
+                IP = data.Reservations[0].Instances[0].PublicIpAddress,
+                State = data.Reservations[0].Instances[0].State.Name
+            }
+
             var response = { 
-                IP: data.Reservations[0].Instances[0].PublicIpAddress,
-                State: data.Reservations[0].Instances[0].State.Name
+                IP: IP,
+                State: State
             }
 
             resolve(response);
+        });
+    });
+};
+
+
+exports.StartInstance = function(InstanceId) {
+    return new Promise(function(resolve, reject) {
+        var ec2 = new AWS.EC2();
+        var params = {
+            InstanceIds: [
+                InstanceId
+            ]
+        };
+
+        //Create the template instance
+        ec2.startInstances(params, function (err, data) {
+            if (err) {
+                reject(err);
+                throw err;
+            }
+
+            resolve("success");
+        });
+    });
+};
+
+exports.StopInstance = function(InstanceId) {
+    return new Promise(function(resolve, reject) {
+        var ec2 = new AWS.EC2();
+        var params = {
+            InstanceIds: [
+                InstanceId
+            ]
+        };
+
+        //Create the template instance
+        ec2.stopInstances(params, function (err, data) {
+            if (err) {
+                reject(err);
+                throw err;
+            }
+
+            resolve("success");
+        });
+    });
+};
+
+exports.DeleteInstance = function(InstanceId) {
+    return new Promise(function(resolve, reject) {
+        var ec2 = new AWS.EC2();
+        var params = {
+            InstanceIds: [
+                InstanceId
+            ]
+        };
+
+        //Create the template instance
+        ec2.terminateInstances(params, function (err, data) {
+            if (err) {
+                reject(err);
+                throw err;
+            }
+
+            resolve("success");
         });
     });
 };

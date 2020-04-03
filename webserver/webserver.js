@@ -110,32 +110,30 @@ app.get('/GetInstances', (req, res) => {
                 itemsProcessed++;
 
                 if (itemsProcessed == itemsToProcess) {
-                    res.send(instanceList);
+                    res.send(instanceList); //TODO: Order the list before sending back to the ui?
                 }
             });
         })
     });
 });
 
-app.get('/Start/InstanceID/:instanceId', (req, res) => {
-
-    //TODO: Implement
-    res.send("Currently not implemented");
-
+app.get('/Start/Instance/:instanceId', (req, res) => {
+    AWSMinecraftServerHosting.StartInstance(req.params.instanceId).then(function(resp) {
+        res.send(resp);
+    });
 });
 
-app.get('/Stop/InstanceID/:instanceId', (req, res) => {
-
-    //TODO: Implement
-    res.send("Currently not implemented");
-
+app.get('/Stop/Instance/:instanceId', (req, res) => {
+    AWSMinecraftServerHosting.StopInstance(req.params.instanceId).then(function(resp) {
+        res.send(resp);
+    });
 });
 
-app.get('/Delete/InstanceID/:instanceId', (req, res) => {
-
-    //TODO: Implement
-    res.send("Currently not implemented");
-
+app.get('/Delete/Instance/:instanceId', (req, res) => {
+    AWSMinecraftServerHosting.DeleteInstance(req.params.instanceId).then(function(resp) {
+        //TODO: Delete the instance from the user object in mongodb
+        res.send(resp);
+    });
 });
 
 //Create a zip file of the minecraft world
